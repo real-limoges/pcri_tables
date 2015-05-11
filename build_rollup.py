@@ -69,7 +69,23 @@ def investment_type(workbook):
 	df = df.agg({'Count':'sum'})
 
 	df = convert_index_to_col(df, "Investment Types")
-	width = {'index': 30, 'other': 15
+	width = {'index': 30, 'other': 15}
+
+	basic_write_out(df, title, workbook, width = width, cell_style = comma_style)
+
+def fund_type(workbook):
+	#Createa  table that shows the distribution of fund_type
+
+	title = 'Distribution of Fund Type'
+
+	df = pd.read_csv(os.path.join(OPEN_PATH, 'fund_view.csv'), header = 0)
+	df['Count'] = 1
+
+	df = df.groupby(["FUND_TYPE"])
+	df = df.agg({'Count':'sum'})
+
+	df = convert_index_to_col(df, "Fund Types")
+	width = {'index': 20, 'other': 15}
 
 	basic_write_out(df, title, workbook, width = width, cell_style = comma_style)
 
@@ -87,6 +103,8 @@ def main():
 	workbook = xlsxwriter.Workbook(os.path.join(SAVE_PATH, OUTFILE))
 	exit_type_id(workbook)
 	investment_category(workbook)
+	investment_type(workbook)
+	fund_type(workbook)
 
 if __name__ == '__main__':
 	main()
