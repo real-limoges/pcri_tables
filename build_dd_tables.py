@@ -45,6 +45,32 @@ def gp_loc_perc(workbook):
 	width = {'index' = 17, 'other' = 17}
 	basic_write_out(df, title, workbook, width = width)
 
+def funds_by_investment_type(workbook):
+	#Creates a table that shows a pivot of funds by investment type over vintage year
+	# in decades
+
+	title = 'Table 2: Breakdown of Funds by Investment Type'
+
+	#Basic Cleaning of Fund Data
+	df = pd.read_csv(os.path.join(OPEN_PATH, 'fund_view.csv'), header = 0)
+	df = df[["VINTAGE_YEAR", "FUND_TYPE"]]
+	df = df.dropna()
+	df = df[df.VINTAGE_YEAR >= 1980]
+	df = df[df.VINTAGE_YEAR <= 2014]
+
+	df = pd.crosstab(df.FUND_TYPE, [df.VINTAGE_YEAR], rownames = ["FUND_TYPE"],
+					 colnames = ["VINTAGE_YEAR"])
+
+	df = transform_to_decades(df)
+	df["Total"] = df.sum(axis = 1)
+	df = convert_columns_to_perc(df)
+	df = convert_index_to_col(df, "Fund Type")
+
+	#Converts Fund Type to more readable format
+	df["Fund Type"].replace(global_vars.fund_type_replace, inplace = True)
+
+	basic_write_out(df, title, workbook)
+
 def transform_to_decades(df):
 	#Converts dataframe from having years as columns
 

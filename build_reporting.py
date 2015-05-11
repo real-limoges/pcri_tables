@@ -13,7 +13,7 @@ import build_dd_tables
 
 def main():
 
-
+	build_dd_tables.main()
 
 
 main()

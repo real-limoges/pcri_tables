@@ -20,3 +20,9 @@ region_replace = {"AFRICA" : "Africa",
 				  "OCEANIA" : "Oceania",
 				  "SOUTH AMERICA" : "South America",
 				  "UNITED STATES" :  "United States"}
+
+fund_type_replace = {"BUYOUT" : "Buyout",
+					 "GROWTH EQUITY" : "Growth Equity",
+					 "OTHER" : "Other",
+					 "SECOND" : "Second",
+					 "VC" : "VC"}
