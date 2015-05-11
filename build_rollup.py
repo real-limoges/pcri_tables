@@ -40,7 +40,24 @@ def exit_type_id(workbook):
 	basic_write_out(df, title, workbook, width = width, cell_style = comma_style)
 
 def investment_category(workbook):
-	#Creates a table that shows the distribution of investment_type
+	#Creates a table that shows the distribution of investment category
+
+	title = 'Distribution of Investment Category'
+
+	#Cleans the data
+	df = pd.read_csv(os.path.join(OPEN_PATH, 'investment_view.csv'), header = 0)
+	df['Count'] = 1
+
+	df = df.groupby(['INVESTMENT_CATEGORY'])
+	df = df.agg({'Count':'sum'})
+
+	df = convert_index_to_col(df, "Investment Categories")
+	width = {'index': 25, 'other': 15}
+
+	basic_write_out(df, title, workbook, width = width, cell_style = comma_style)
+
+def investment_type(workbook):
+	#Creates a table that shows the distribution of investment category
 
 	title = 'Distribution of Investment Type'
 
@@ -52,7 +69,7 @@ def investment_category(workbook):
 	df = df.agg({'Count':'sum'})
 
 	df = convert_index_to_col(df, "Investment Types")
-	width = {'index': 30, 'other': 15}
+	width = {'index': 30, 'other': 15
 
 	basic_write_out(df, title, workbook, width = width, cell_style = comma_style)
 
