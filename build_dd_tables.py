@@ -15,6 +15,7 @@ import xlsxwriter
 
 #User Made Modules
 import global_vars
+from write_out_data import basic_write_out
 
 def gp_loc_perc(workbook):
 	#Creates a table that shows a pivot of GP by location over time (decades)
@@ -40,6 +41,9 @@ def gp_loc_perc(workbook):
 	df = convert_index_to_col(df, "REGIONS")
 
 	df["REGIONS"].replace(global_vars.region_replace, inplace = True)
+
+	width = {'index' = 17, 'other' = 17}
+	basic_write_out(df, title, workbook, width = width)
 
 def transform_to_decades(df):
 	#Converts dataframe from having years as columns
