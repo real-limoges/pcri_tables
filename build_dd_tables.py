@@ -120,6 +120,29 @@ def companies_by_region(workbook):
 	df["Regions"].replace(global_vars.region_replace, inplace = True)
 
 	basic_write_out(df, title, workbook)
+
+def gps_by_type(workbook):
+	#Creates a table that show ta pivot of GP by gp type over year founded
+
+	title = 'Table 5: PRivate Capital Firms by Type'
+
+	#Basic cleaning of GP data
+	df = pd.read_csv(os.path.join(OPEN_PATH, 'gp_view.csv'), header = 0)
+	df = df[["YEAR_FOUNDED", "GP_TYPE"]]
+	df.dropna()
+	df = df[df.YEAR_FOUNDED >= 1980]
+
+	df = pd.crosstab(df.GP_TYPE, [df.YEAR_FOUNDED], rownames = ["GP_TYPE"],
+					 colnames = ["YEAR_FOUNDED"])
+
+	df = transform_to_decades(df)
+	df["Total"] = df.sum(axis = 1)
+	df = convert_columns_to_perc(df)
+	df = convert_index_to_col(df, "GP Type")
+	df["GP Type"].replace(global_vars.fund_type_replace, inplace = True)
+
+	basic_write_out(df, title, workbook)
+
 def transform_to_decades(df):
 	#Converts dataframe from having years as columns
 
@@ -174,4 +197,7 @@ def main():
 	workbook = xlsxwriter.Workbook(os.path.join(SAVE_PATH, OUTFILE))
 	gp_loc_perc(workbook)
 	funds_by_investment_type(workbook)
+	companies_by_nvca(workbook)
+	companies_by_region(workbook)
+	gps_by_type(workbook)
 
