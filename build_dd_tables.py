@@ -71,6 +71,29 @@ def funds_by_investment_type(workbook):
 
 	basic_write_out(df, title, workbook)
 
+def companies_by_nvca(workbook):
+	#Creates a table that shows a pivot of portfolio company by NVCA over year founded
+
+	title = 'Table 3: Companies by Industry, Split by Year Founded'
+
+	#Basic cleaning of Company data
+	df = pd.read_csv(os.path.join(OPEN_PATH, 'company_view.csv'), header = 0)
+	df = df[["YEAR_FOUNDED", "NVCA"]]
+	df = df.dropna()
+	df = df[df.YEAR_FOUNDED >= 1980]
+	df = df[df.NVCA != "OTHER"]
+
+	df = pd.crosstab(df.NVCA, [df.YEAR_FOUNDED], rownames = ["NVCA"],
+					 colnames = ["YEAR_FOUNDED"])
+
+	df = transform_to_decades(df)
+	df["Total"] = df.sum(axis = 1)
+	df = convert_columns_to_perc(df)
+	df = convert_index_to_col(df, "NVCA")
+
+	width = {'index': 20, 'other': 15}
+	basic_write_out(df, title, workbook, width = width)
+
 def transform_to_decades(df):
 	#Converts dataframe from having years as columns
 
@@ -124,4 +147,5 @@ def main():
 
 	workbook = xlsxwriter.Workbook(os.path.join(SAVE_PATH, OUTFILE))
 	gp_loc_perc(workbook)
+	funds_by_investment_type(workbook)
 
