@@ -1,12 +1,12 @@
 # -*- coding utf-8 -*-
 
-"""
+'''
 By : Real Limoges
 Last Updated : 5/11/15
 
 This file builds the tables for the data description paper
 
-"""
+'''
 
 #Standard Libraries
 import os
@@ -24,23 +24,23 @@ def gp_loc_perc(workbook):
 
 	#Basic cleaning of GP data
 	df = pd.read_csv(os.path.join(OPEN_PATH, 'gp_view.csv'), header = 0)
-	df = df[["YEAR_FOUNDED", "REGION_ID", "COUNTRY_ID"]]
+	df = df[['YEAR_FOUNDED', 'REGION_ID', 'COUNTRY_ID']]
 	df = df.dropna()
 	df = df[df.YEAR_FOUNDED >= 1980]
-	df = df[df.REGION_ID != "ANTARCTICA"]
+	df = df[df.REGION_ID != 'ANTARCTICA']
 
 	#Separates UNITED STATES from North America
-	df.ix[df.COUNTRY_ID == "UNITED STATES", "REGION_ID"] = "UNITED STATES"
+	df.ix[df.COUNTRY_ID == 'UNITED STATES', 'REGION_ID'] = 'UNITED STATES'
 
-	df = pd.crosstab(df.REGION_ID, [df.YEAR_FOUNDED], rownames = ["REGION_ID"],
-					 colnames = ["YEAR_FOUNDED"])
+	df = pd.crosstab(df.REGION_ID, [df.YEAR_FOUNDED], rownames = ['REGION_ID'],
+					 colnames = ['YEAR_FOUNDED'])
 
 	df = transform_to_decades(df)
-	df["Total"] = df.sum(axis = 1)
+	df['Total'] = df.sum(axis = 1)
 	df = convert_columns_to_perc(df)
-	df = convert_index_to_col(df, "REGIONS")
+	df = convert_index_to_col(df, 'REGIONS')
 
-	df["REGIONS"].replace(global_vars.region_replace, inplace = True)
+	df['REGIONS'].replace(global_vars.region_replace, inplace = True)
 
 	width = {'index' = 17, 'other' = 17}
 	basic_write_out(df, title, workbook, width = width)
@@ -53,21 +53,21 @@ def funds_by_investment_type(workbook):
 
 	#Basic Cleaning of Fund Data
 	df = pd.read_csv(os.path.join(OPEN_PATH, 'fund_view.csv'), header = 0)
-	df = df[["VINTAGE_YEAR", "FUND_TYPE"]]
+	df = df[['VINTAGE_YEAR', 'FUND_TYPE']]
 	df = df.dropna()
 	df = df[df.VINTAGE_YEAR >= 1980]
 	df = df[df.VINTAGE_YEAR <= 2014]
 
-	df = pd.crosstab(df.FUND_TYPE, [df.VINTAGE_YEAR], rownames = ["FUND_TYPE"],
-					 colnames = ["VINTAGE_YEAR"])
+	df = pd.crosstab(df.FUND_TYPE, [df.VINTAGE_YEAR], rownames = ['FUND_TYPE'],
+					 colnames = ['VINTAGE_YEAR'])
 
 	df = transform_to_decades(df)
-	df["Total"] = df.sum(axis = 1)
+	df['Total'] = df.sum(axis = 1)
 	df = convert_columns_to_perc(df)
-	df = convert_index_to_col(df, "Fund Type")
+	df = convert_index_to_col(df, 'Fund Type')
 
 	#Converts Fund Type to more readable format
-	df["Fund Type"].replace(global_vars.fund_type_replace, inplace = True)
+	df['Fund Type'].replace(global_vars.fund_type_replace, inplace = True)
 
 	basic_write_out(df, title, workbook)
 
@@ -78,18 +78,18 @@ def companies_by_nvca(workbook):
 
 	#Basic cleaning of Company data
 	df = pd.read_csv(os.path.join(OPEN_PATH, 'company_view.csv'), header = 0)
-	df = df[["YEAR_FOUNDED", "NVCA"]]
+	df = df[['YEAR_FOUNDED', 'NVCA']]
 	df = df.dropna()
 	df = df[df.YEAR_FOUNDED >= 1980]
-	df = df[df.NVCA != "OTHER"]
+	df = df[df.NVCA != 'OTHER']
 
-	df = pd.crosstab(df.NVCA, [df.YEAR_FOUNDED], rownames = ["NVCA"],
-					 colnames = ["YEAR_FOUNDED"])
+	df = pd.crosstab(df.NVCA, [df.YEAR_FOUNDED], rownames = ['NVCA'],
+					 colnames = ['YEAR_FOUNDED'])
 
 	df = transform_to_decades(df)
-	df["Total"] = df.sum(axis = 1)
+	df['Total'] = df.sum(axis = 1)
 	df = convert_columns_to_perc(df)
-	df = convert_index_to_col(df, "NVCA")
+	df = convert_index_to_col(df, 'NVCA')
 
 	width = {'index': 20, 'other': 15}
 	basic_write_out(df, title, workbook, width = width)
@@ -101,23 +101,23 @@ def companies_by_region(workbook):
 
 	#Basic Cleaning of Company Data
 	df = df.read_csv(os.path.join(OPEN_PATH, 'company_view.csv'), header = 0)
-	df = df[["YEAR_FOUNDED", "COUNTRY_ID", "REGION_ID"]]
+	df = df[['YEAR_FOUNDED', 'COUNTRY_ID', 'REGION_ID']]
 	df.dropna()
 	df = df[df.YEAR_FOUNDED >= 1980]
-	df = df[df.REGION_ID != "ANTARCTICA"]
+	df = df[df.REGION_ID != 'ANTARCTICA']
 
 	#Separates United States from North America
-	df.ix[df.COUNTRY_ID == "UNITED STATES", "REGION_ID"] = "UNITED STATES"
+	df.ix[df.COUNTRY_ID == 'UNITED STATES', 'REGION_ID'] = 'UNITED STATES'
 
-	df = pd.crosstab(df.REGION_ID, [df.YEAR_FOUNDED], rownames = ["REGION_ID"],
-		             colnames = ["YEAR_FOUNDED"])
+	df = pd.crosstab(df.REGION_ID, [df.YEAR_FOUNDED], rownames = ['REGION_ID'],
+		             colnames = ['YEAR_FOUNDED'])
 
 	df = transform_to_decades(df)
 	df = convert_columns_to_perc(df)
-	df = convert_index_to_col(df, "Regions")
+	df = convert_index_to_col(df, 'Regions')
 
 	#Converts Regions to more readable format
-	df["Regions"].replace(global_vars.region_replace, inplace = True)
+	df['Regions'].replace(global_vars.region_replace, inplace = True)
 
 	basic_write_out(df, title, workbook)
 
@@ -128,25 +128,25 @@ def gps_by_type(workbook):
 
 	#Basic cleaning of GP data
 	df = pd.read_csv(os.path.join(OPEN_PATH, 'gp_view.csv'), header = 0)
-	df = df[["YEAR_FOUNDED", "GP_TYPE"]]
+	df = df[['YEAR_FOUNDED', 'GP_TYPE']]
 	df.dropna()
 	df = df[df.YEAR_FOUNDED >= 1980]
 
-	df = pd.crosstab(df.GP_TYPE, [df.YEAR_FOUNDED], rownames = ["GP_TYPE"],
-					 colnames = ["YEAR_FOUNDED"])
+	df = pd.crosstab(df.GP_TYPE, [df.YEAR_FOUNDED], rownames = ['GP_TYPE'],
+					 colnames = ['YEAR_FOUNDED'])
 
 	df = transform_to_decades(df)
-	df["Total"] = df.sum(axis = 1)
+	df['Total'] = df.sum(axis = 1)
 	df = convert_columns_to_perc(df)
-	df = convert_index_to_col(df, "GP Type")
-	df["GP Type"].replace(global_vars.fund_type_replace, inplace = True)
+	df = convert_index_to_col(df, 'GP Type')
+	df['GP Type'].replace(global_vars.fund_type_replace, inplace = True)
 
 	basic_write_out(df, title, workbook)
 
 def transform_to_decades(df):
 	#Converts dataframe from having years as columns
 
-	decades = ["1980-89", "1990-99", "2000-09", "2010-Present"]
+	decades = ['1980-89', '1990-99', '2000-09', '2010-Present']
 	col_list = [range(1980,1990), range(1990,2000), range(2000,2010),
 				range(2010,2015)]
 
