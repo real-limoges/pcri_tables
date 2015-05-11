@@ -94,6 +94,32 @@ def companies_by_nvca(workbook):
 	width = {'index': 20, 'other': 15}
 	basic_write_out(df, title, workbook, width = width)
 
+def companies_by_region(workbook):
+	#Creates a table that shows a pivot of portfolio company by region over year founded
+
+	title = 'Table 4: Companies by Region, Split by Year Founded'
+
+	#Basic Cleaning of Company Data
+	df = df.read_csv(os.path.join(OPEN_PATH, 'company_view.csv'), header = 0)
+	df = df[["YEAR_FOUNDED", "COUNTRY_ID", "REGION_ID"]]
+	df.dropna()
+	df = df[df.YEAR_FOUNDED >= 1980]
+	df = df[df.REGION_ID != "ANTARCTICA"]
+
+	#Separates United States from North America
+	df.ix[df.COUNTRY_ID == "UNITED STATES", "REGION_ID"] = "UNITED STATES"
+
+	df = pd.crosstab(df.REGION_ID, [df.YEAR_FOUNDED], rownames = ["REGION_ID"],
+		             colnames = ["YEAR_FOUNDED"])
+
+	df = transform_to_decades(df)
+	df = convert_columns_to_perc(df)
+	df = convert_index_to_col(df, "Regions")
+
+	#Converts Regions to more readable format
+	df["Regions"].replace(global_vars.region_replace, inplace = True)
+
+	basic_write_out(df, title, workbook)
 def transform_to_decades(df):
 	#Converts dataframe from having years as columns
 
