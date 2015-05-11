@@ -12,10 +12,16 @@ This file builds the tables for the data description paper
 import os
 import pandas as pd
 import xlsxwriter
+from compiler.ast import flatten
 
 #User Made Modules
 import global_vars
 from write_out_data import basic_write_out
+
+OPEN_PATH = global_vars.OPEN_PATH
+SAVE_PATH = global_vars.SAVE_PATH
+
+OUTFILE = 'Data_Description_Tables.xlsx'
 
 def gp_loc_perc(workbook):
 	#Creates a table that shows a pivot of GP by location over time (decades)
