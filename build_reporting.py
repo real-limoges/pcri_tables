@@ -10,10 +10,11 @@ rollup and the Data Description Paper.
 
 #User Made Modules
 import build_dd_tables
+import build_rollup
 
 def main():
 
 	build_dd_tables.main()
-
+	build_rollup.main()
 
 main()
