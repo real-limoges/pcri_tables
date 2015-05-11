@@ -39,6 +39,23 @@ def exit_type_id(workbook):
 
 	basic_write_out(df, title, workbook, width = width, cell_style = comma_style)
 
+def investment_category(workbook):
+	#Creates a table that shows the distribution of investment_type
+
+	title = 'Distribution of Investment Type'
+
+	#Cleans the data
+	df = pd.read_csv(os.path.join(OPEN_PATH, 'investment_view.csv'), header = 0)
+	df['Count'] = 1
+
+	df = df.groupby(['INVESTMENT_TYPE'])
+	df = df.agg({'Count':'sum'})
+
+	df = convert_index_to_col(df, "Investment Types")
+	width = {'index': 30, 'other': 15}
+
+	basic_write_out(df, title, workbook, width = width, cell_style = comma_style)
+
 def convert_index_to_col(df, index_name):
 	#Converts the dataframe index into a column; places as first column in dataframe
 
@@ -52,6 +69,7 @@ def convert_index_to_col(df, index_name):
 def main():
 	workbook = xlsxwriter.Workbook(os.path.join(SAVE_PATH, OUTFILE))
 	exit_type_id(workbook)
+	investment_category(workbook)
 
 if __name__ == '__main__':
 	main()
