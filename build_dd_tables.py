@@ -207,3 +207,5 @@ def main():
 	companies_by_region(workbook)
 	gps_by_type(workbook)
 
+if __name__ == '__main__':
+	main()
